@@ -10,5 +10,3 @@ export const VerseSchema = new Schema({
     translation: String
 
 })
-
-export default mongoose.model('Verse', VerseSchema, 'esv')

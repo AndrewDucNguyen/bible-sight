@@ -1,14 +1,3 @@
-/*
-    1. Connect to mongodb: bible-sight, esv collection
-    2. Read from JSON file
-    3. Flatten out the array into correct format:
-        Book: Genesis
-        Chapter: 1
-        Verse: 1,
-        Translation: ESV
-    4. insert it into mongodb by verse documents
-*/
-
 import fs from 'fs'
 import path from 'path';
 import mongoose from 'mongoose'
@@ -17,12 +6,15 @@ import {VerseSchema} from '../models/verse.js'
 // Get the full path from this file
 const __dirname = path.resolve()
 
-const translations = ['esv']
-
 const seed = async () =>  {
     try {
         // Connect to Bible-Sight DB
         await mongoose.connect("mongodb://127.0.0.1:27017/bible-sight");
+        console.log('MongoDB Connected!')
+
+        const translations = fs.readdirSync(__dirname).filter(file =>
+            fs.statSync(path.join(__dirname, file)).isDirectory()
+        );
 
         for (const translation of translations) {
             const VerseModel = mongoose.model('Verse', VerseSchema, translation.toLowerCase())
@@ -77,6 +69,7 @@ const seed = async () =>  {
     finally {
         // Close out the connect when finished
         await mongoose.connection.close();
+        console.log('MongoDB Disconnected!')
     }
 }
 
