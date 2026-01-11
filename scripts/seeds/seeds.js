@@ -45,6 +45,7 @@ const seed = async () =>  {
                 // Loop through the object array and set it to correct key: value pair object
                 for (const [chapter, verseObject] of Object.entries(data)) {
                     for (const [verse, text] of Object.entries(verseObject)){
+                        console.log('text:', text)
                         verses.push({
                             book: bookName,
                             chapter: Number(chapter),
