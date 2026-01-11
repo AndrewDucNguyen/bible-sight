@@ -45,7 +45,10 @@ const seed = async () =>  {
                 // Loop through the object array and set it to correct key: value pair object
                 for (const [chapter, verseObject] of Object.entries(data)) {
                     for (const [verse, text] of Object.entries(verseObject)){
-                        console.log('text:', text)
+                        // Skip entries with empty or whitespace-only text
+                        if (!text || typeof text !== 'string' || text.trim() === '') {
+                            continue;
+                        }
                         verses.push({
                             book: bookName,
                             chapter: Number(chapter),
@@ -58,6 +61,7 @@ const seed = async () =>  {
 
                 // Insert into Verses collection. Mongoose makes this schema name into its own collection from the
                 // connection above
+                console.log(verses, 'verses after')
                 await VerseModel.insertMany(verses)
                 console.log(`Seeded the book of ${bookName}`)
             }
